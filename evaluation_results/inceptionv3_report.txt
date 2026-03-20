@@ -1,0 +1,35 @@
+Model: InceptionV3
+Overall Accuracy: 54.20%
+Macro AUC (OvR):  0.7722
+
+                      precision    recall  f1-score   support
+
+   Actinic Keratosis      0.221     0.698     0.336       364
+Basal Cell Carcinoma      0.000     0.000     0.000       768
+    Benign Keratosis      0.000     0.000     0.000       745
+      Dermatofibroma      0.000     0.000     0.000        71
+    Melanocytic Nevi      0.792     0.754     0.773      3916
+  Pyogenic Granuloma      0.000     0.000     0.000        79
+            Melanoma      0.285     0.555     0.377      1127
+
+            accuracy                          0.542      7070
+           macro avg      0.185     0.287     0.212      7070
+        weighted avg      0.495     0.542     0.505      7070
+
+Per-class Specificity:
+  Actinic Keratosis         0.866
+  Basal Cell Carcinoma      1.000
+  Benign Keratosis          1.000
+  Dermatofibroma            1.000
+  Melanocytic Nevi          0.754
+  Pyogenic Granuloma        1.000
+  Melanoma                  0.736
+
+Per-class AUC:
+  Actinic Keratosis         0.8784
+  Basal Cell Carcinoma      0.8301
+  Benign Keratosis          0.6767
+  Dermatofibroma            0.8309
+  Melanocytic Nevi          0.8358
+  Pyogenic Granuloma        0.6648
+  Melanoma                  0.6888

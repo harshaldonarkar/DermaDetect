@@ -1,0 +1,17 @@
+numpy
+pandas
+matplotlib
+seaborn
+scikit-learn
+imbalanced-learn
+tensorflow
+tensorflow-metal
+opencv-python
+scipy
+Pillow
+flask
+gunicorn
+pymongo
+reportlab
+flask-login
+flask-limiter

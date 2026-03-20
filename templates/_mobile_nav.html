@@ -1,0 +1,54 @@
+<style>
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+}
+.hamburger span {
+    display: block;
+    width: 24px;
+    height: 3px;
+    background: #175810;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+@media (max-width: 768px) {
+    .hamburger { display: flex; }
+    .nav-links, nav.nav-links {
+        display: none !important;
+        flex-direction: column !important;
+        position: absolute;
+        top: 100%;
+        left: 0; right: 0;
+        background: #fff;
+        padding: 12px 20px 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        z-index: 200;
+        gap: 14px !important;
+    }
+    .nav-links.open, nav.nav-links.open {
+        display: flex !important;
+    }
+    header { position: relative; }
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const btn = document.getElementById('hamburger');
+    const nav = document.querySelector('.nav-links');
+    if (btn && nav) {
+        btn.addEventListener('click', function () {
+            nav.classList.toggle('open');
+        });
+        // Close when a link is clicked
+        nav.querySelectorAll('a').forEach(a => {
+            a.addEventListener('click', () => nav.classList.remove('open'));
+        });
+    }
+});
+</script>

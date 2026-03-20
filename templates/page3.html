@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin Cancer Detection - DermaDetect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Lexend:wght@600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script> <!-- Particles.js CDN -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #e9f9e7, #5da64e);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            color: #000;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Keyframes for animated gradient */
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 25% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 25% 50%;
+            }
+        }
+
+        /* Particle effect container */
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1; /* Ensures particles are behind content */
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        header {
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 600;
+            color: #5da64e;
+            font-size: 36px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #000000;
+            font-size: 18px;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #5da64e;
+        }
+
+        main {
+            padding: 50px 0;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-family: 'Lexend', sans-serif;
+            font-weight: 600;
+            color: #2f6329;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #175810;
+            border-color: #175810;
+            font-size: 18px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #2E6F1F;
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .form-container { padding: 20px; }
+        }
+
+        /* Loading overlay */
+        #loadingOverlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,0.85);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        #loadingOverlay.active { display: flex; }
+
+        .spinner {
+            width: 60px; height: 60px;
+            border: 6px solid #e0e0e0;
+            border-top-color: #175810;
+            border-radius: 50%;
+            animation: spin 0.9s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-family: 'Lexend', sans-serif;
+            font-size: 1.2rem;
+            color: #2f6329;
+            font-weight: 600;
+        }
+        .loading-sub {
+            font-size: 0.9rem;
+            color: #777;
+            margin-top: -12px;
+        }
+    </style>
+{% include '_mobile_nav.html' %}
+</head>
+<body>
+
+    <!-- Loading overlay -->
+    <div id="loadingOverlay">
+        <div class="spinner"></div>
+        <p class="loading-text">Analysing image...</p>
+        <p class="loading-sub">Running model inference and Grad-CAM. This may take a few seconds.</p>
+    </div>
+
+    <!-- Particles.js Container -->
+    <div id="particles-js"></div>
+
+    <header>
+        <div class="container">
+            <div class="nav-container">
+                <div class="logo">DermaDetect</div>
+                <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+                <nav class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/about">About</a>
+                    <a href="/history">Patient History</a>
+                    <a href="/contact">Contact</a>
+                    <a href="https://ijcnis.org/index.php/ijcnis/article/view/7727" target="_blank">Research</a>
+                    {% if current_user.is_authenticated %}
+                        <a href="/profile" style="color:#5da64e; font-weight:600; text-decoration:none;">{{ current_user.username }}</a>
+                        <a href="/logout">Logout</a>
+                    {% else %}
+                        <a href="/login">Login</a>
+                    {% endif %}
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="form-container">
+                <h1>Skin Cancer Detection</h1>
+                <form method="POST" enctype="multipart/form-data" action="/showresult">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="patientName" class="form-label">Patient Name</label>
+                            <input type="text" class="form-control" id="patientName" name="patient_name" placeholder="Enter name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="patientID" class="form-label">Patient ID</label>
+                            <input type="text" class="form-control" id="patientID" name="patient_id" placeholder="Enter ID">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="patientAge" class="form-label">Age</label>
+                            <input type="number" class="form-control" id="patientAge" name="patient_age" min="1" max="120" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="patientSex" class="form-label">Sex</label>
+                            <select class="form-select" id="patientSex" name="patient_sex" required>
+                                <option value="" disabled selected>Select</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                                <option value="prefer_not_to_say">Prefer Not to Say</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="patientEthnicity" class="form-label">Ethnicity</label>
+                            <select class="form-select" id="patientEthnicity" name="patient_ethnicity">
+                                <option value="" disabled selected>Select</option>
+                                <option value="caucasian">Caucasian</option>
+                                <option value="african_american">African American</option>
+                                <option value="asian">Asian</option>
+                                <option value="hispanic">Hispanic</option>
+                                <option value="native_american">Native American</option>
+                                <option value="other">Other</option>
+                                <option value="prefer_not_to_say">Prefer Not to Say</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="medicalHistory" class="form-label">Brief Medical History (Optional)</label>
+                        <textarea class="form-control" id="medicalHistory" name="medical_history" rows="3" placeholder="Enter any relevant medical details"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Upload Skin Image</label>
+                        <input type="file" class="form-control" id="formFile" name="pic" accept="image/*" required>
+                        <div id="previewWrap" style="display:none; margin-top:14px; text-align:center;">
+                            <img id="imagePreview" src="" alt="Preview"
+                                style="max-width:260px; max-height:260px; border-radius:12px;
+                                       box-shadow:0 4px 12px rgba(0,0,0,0.15); border:2px solid #5da64e;">
+                            <p style="margin-top:6px; font-size:0.85rem; color:#555;" id="previewName"></p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function () {
+            document.getElementById('loadingOverlay').classList.add('active');
+        });
+
+        document.getElementById('formFile').addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+            const wrap = document.getElementById('previewWrap');
+            const img  = document.getElementById('imagePreview');
+            const name = document.getElementById('previewName');
+            const reader = new FileReader();
+            reader.onload = e => {
+                img.src = e.target.result;
+                name.textContent = file.name;
+                wrap.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+
+        // Initialize Particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 150 },
+                size: { value: 3 },
+                move: { speed: 1 }
+            },
+            interactivity: {
+                detect_on: 'window',
+                events: {
+                    onhover: { enable: true, mode: 'repulse' }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

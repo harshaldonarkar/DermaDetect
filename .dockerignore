@@ -1,0 +1,27 @@
+.venv/
+__pycache__/
+*.pyc
+
+# Large training datasets — not needed at runtime
+HAM10000_images_part_1/
+HAM10000_images_part_2/
+ISIC_2019_Training_Input/
+*.csv
+hmnist_*.csv
+
+# Training artefacts
+train_model.py
+*.ipynb
+Skin_Cancer_Detection_copy.ipynb
+
+# Old model weights
+best_model.h5
+best_model.keras
+
+# Misc
+.qodo/
+import numpy as np.py
+mong.py
+tester.jpg
+model.png
+model_architecture.png

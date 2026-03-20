@@ -1,0 +1,15 @@
+Overall accuracy: 66.62%
+
+                      precision    recall  f1-score   support
+
+   Actinic Keratosis      0.571     0.429     0.490       364
+Basal Cell Carcinoma      0.600     0.794     0.683       768
+    Benign Keratosis      0.353     0.789     0.488       745
+      Dermatofibroma      0.532     0.577     0.554        71
+    Melanocytic Nevi      0.912     0.695     0.789      3916
+  Pyogenic Granuloma      0.460     0.949     0.620        79
+            Melanoma      0.584     0.461     0.515      1127
+
+            accuracy                          0.666      7070
+           macro avg      0.573     0.671     0.591      7070
+        weighted avg      0.740     0.666     0.682      7070

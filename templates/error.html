@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaDetect - Error {{ code }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Lexend:wght@600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #e9f9e7, #5da64e);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            min-height: 100vh; display: flex; flex-direction: column;
+            overflow-x: hidden;
+        }
+        @keyframes gradientAnimation {
+            0%   { background-position: 25% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 25% 50%; }
+        }
+        #particles-js { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-1; }
+        header { background:#fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .nav-container {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:15px 20px; max-width:1280px; margin:0 auto;
+        }
+        .logo { font-family:'Lexend',sans-serif; font-weight:600; color:#5da64e; font-size:32px; text-decoration:none; }
+        .card-wrap { flex:1; display:flex; align-items:center; justify-content:center; padding:40px 15px; }
+        .error-card {
+            background:#fff; border-radius:16px;
+            box-shadow:0 6px 24px rgba(0,0,0,0.12);
+            padding:50px 40px; width:100%; max-width:480px; text-align:center;
+        }
+        .error-code {
+            font-family:'Lexend',sans-serif; font-size:5rem;
+            font-weight:600; color:#5da64e; line-height:1;
+        }
+        .error-title {
+            font-family:'Lexend',sans-serif; font-size:1.5rem;
+            color:#2f6329; margin:12px 0 8px;
+        }
+        .error-msg { color:#555; font-size:1rem; margin-bottom:30px; line-height:1.6; }
+        .btn-home {
+            display:inline-block; padding:12px 32px;
+            background:#175810; color:#fff; text-decoration:none;
+            border-radius:25px; font-size:16px; font-weight:600;
+            transition:all 0.3s ease;
+        }
+        .btn-home:hover { background:#2E6F1F; transform:translateY(-3px); }
+    </style>
+{% include '_mobile_nav.html' %}
+</head>
+<body>
+<div id="particles-js"></div>
+
+<header>
+    <div class="nav-container">
+        <a href="/" class="logo">DermaDetect</a>
+    </div>
+</header>
+
+<div class="card-wrap">
+    <div class="error-card">
+        <div class="error-code">{{ code }}</div>
+        <h1 class="error-title">
+            {% if code == 404 %}Page Not Found
+            {% elif code == 400 %}Bad Request
+            {% else %}Server Error{% endif %}
+        </h1>
+        <p class="error-msg">{{ message }}</p>
+        <a href="/" class="btn-home">Back to Home</a>
+    </div>
+</div>
+
+<script>
+    particlesJS('particles-js', {
+        particles: { number:{value:80}, size:{value:3}, move:{speed:1} },
+        interactivity: { detect_on:'window', events:{onhover:{enable:true, mode:'repulse'}} }
+    });
+</script>
+</body>
+</html>

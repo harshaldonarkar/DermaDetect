@@ -1,0 +1,37 @@
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Trained model weights (too large for GitHub)
+*.keras
+*.h5
+*.pb
+
+# Dataset image folders (too large for GitHub)
+HAM10000_images_part_1/
+HAM10000_images_part_2/
+ISIC_2019_Training_Input/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Claude Code
+CLAUDE.md
+memory/
+
+# Paper generation script (internal)
+generate_paper.py

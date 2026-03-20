@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DermaDetect - My Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Lexend:wght@600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(45deg, #e9f9e7, #5da64e);
+            background-size: 400% 400%;
+            animation: gradientAnimation 10s ease infinite;
+            color: #000;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientAnimation {
+            0%   { background-position: 25% 50%; }
+            50%  { background-position: 100% 50%; }
+            100% { background-position: 25% 50%; }
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 15px; }
+
+        header {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 10;
+        }
+
+        .nav-container {
+            display: flex; justify-content: space-between; align-items: center; padding: 15px 0;
+        }
+
+        .logo { font-family: 'Lexend', sans-serif; font-weight: 600; color: #5da64e; font-size: 36px; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-link { text-decoration: none; color: #000; font-size: 18px; transition: color 0.3s ease; }
+        .nav-link:hover, .nav-link.active { color: #5da64e; }
+
+        main { padding: 40px 0 60px; }
+
+        .profile-header {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 28px 32px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .avatar {
+            width: 72px; height: 72px;
+            border-radius: 50%;
+            background: #175810;
+            color: #fff;
+            font-family: 'Lexend', sans-serif;
+            font-size: 2rem;
+            font-weight: 600;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .profile-info h2 {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 600;
+            color: #2f6329;
+            font-size: 1.8rem;
+        }
+
+        .profile-info p { color: #555; font-size: 0.95rem; }
+
+        .page-title {
+            font-family: 'Lexend', sans-serif;
+            font-weight: 600;
+            color: #2f6329;
+            font-size: 1.6rem;
+            margin-bottom: 16px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px; margin-bottom: 28px;
+        }
+        .stat-card {
+            background: #fff; border-radius: 12px; padding: 20px 16px;
+            text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .stat-card .stat-value {
+            font-family: 'Lexend', sans-serif; font-size: 2rem; font-weight: 600; line-height: 1;
+        }
+        .stat-card .stat-label { font-size: 0.82rem; color: #666; margin-top: 6px; }
+        .stat-total   .stat-value { color: #2f6329; }
+        .stat-cancer  .stat-value { color: #c0392b; }
+        .stat-caution .stat-value { color: #856404; }
+        .stat-safe    .stat-value { color: #1e7e34; }
+
+        .chart-wrap {
+            background: #fff; border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 24px; margin-bottom: 28px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 40px; flex-wrap: wrap;
+        }
+        .chart-wrap canvas { max-width: 200px; max-height: 200px; }
+        .chart-legend { list-style: none; padding: 0; }
+        .chart-legend li { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; margin-bottom: 8px; }
+        .chart-legend .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+        .toolbar {
+            display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+        }
+        .toolbar input, .toolbar select {
+            padding: 10px 14px; border: 1px solid #ccc; border-radius: 8px;
+            font-size: 0.95rem; font-family: 'Inter', sans-serif; background: #fff;
+            flex: 1; min-width: 160px;
+        }
+        .toolbar input:focus, .toolbar select:focus { outline: none; border-color: #5da64e; }
+
+        .table-wrap {
+            background: #fff; border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1); overflow: hidden;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+        thead { background: #175810; color: #fff; }
+        thead th { padding: 14px 16px; text-align: left; font-weight: 600; white-space: nowrap; }
+        tbody tr { border-bottom: 1px solid #f0f0f0; transition: background 0.15s; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: #f4fbf3; }
+        tbody td { padding: 12px 16px; vertical-align: middle; }
+
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        .badge-cancer    { background: #fde8e8; color: #c0392b; }
+        .badge-noncancer { background: #e8f8e8; color: #1e7e34; }
+        .badge-caution   { background: #fff3cd; color: #856404; }
+
+        .confidence-cell { font-weight: 600; }
+        .conf-high   { color: #1e7e34; }
+        .conf-medium { color: #856404; }
+        .conf-low    { color: #c0392b; }
+
+        .delete-btn {
+            background: none; border: 1px solid #e74c3c; color: #e74c3c;
+            border-radius: 6px; padding: 4px 9px; cursor: pointer;
+            font-size: 0.85rem; transition: all 0.2s;
+        }
+        .delete-btn:hover { background: #e74c3c; color: #fff; }
+
+        .flash-success {
+            background: #d4edda; border: 1px solid #c3e6cb;
+            color: #155724; border-radius: 8px;
+            padding: 10px 16px; margin-bottom: 16px; font-size: 0.95rem;
+        }
+
+        .record-count { font-size: 0.9rem; color: #666; margin-bottom: 10px; }
+
+        .pagination-wrap {
+            display: flex; justify-content: center; align-items: center;
+            gap: 8px; margin-top: 20px; flex-wrap: wrap;
+        }
+        .page-btn {
+            padding: 7px 14px; border: 1px solid #ccc; border-radius: 8px;
+            background: #fff; cursor: pointer; font-size: 0.9rem;
+            font-family: 'Inter', sans-serif; transition: all 0.2s;
+        }
+        .page-btn:hover:not(:disabled) { border-color: #5da64e; color: #175810; }
+        .page-btn.active { background: #175810; color: #fff; border-color: #175810; }
+        .page-btn:disabled { opacity: 0.4; cursor: default; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: #777; }
+        .empty-state h3 { font-size: 1.3rem; margin-bottom: 8px; color: #444; }
+
+        @media (max-width: 768px) {
+            .page-title { font-size: 1.4rem; }
+            thead th, tbody td { padding: 10px; font-size: 0.85rem; }
+            .profile-header { flex-direction: column; text-align: center; }
+        }
+    </style>
+{% include '_mobile_nav.html' %}
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<header>
+    <div class="container">
+        <nav class="nav-container">
+            <div class="logo">DermaDetect</div>
+            <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/about" class="nav-link">About</a>
+                <a href="/history" class="nav-link">Patient History</a>
+                <a href="/contact" class="nav-link">Contact us</a>
+                <a href="https://ijcnis.org/index.php/ijcnis/article/view/7727" target="_blank" class="nav-link">Research</a>
+                {% if current_user.is_authenticated %}
+                    <a href="/profile" class="nav-link active" style="color:#5da64e; font-weight:600;">{{ current_user.username }}</a>
+                    <a href="/logout" class="nav-link">Logout</a>
+                {% else %}
+                    <a href="/login" class="nav-link">Login</a>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+
+        <!-- Profile header card -->
+        <div class="profile-header">
+            <div class="avatar">{{ current_user.username[0] | upper }}</div>
+            <div class="profile-info">
+                <h2>{{ current_user.username }}</h2>
+                <p>{{ current_user.email }}</p>
+                <p style="margin-top:4px; color:#888; font-size:0.85rem;">Your personal scan history</p>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endwith %}
+
+        {% if not mongo_available %}
+        <div class="empty-state">
+            <h3>MongoDB is not connected</h3>
+            <p>Start MongoDB to view your scan history.</p>
+        </div>
+
+        {% elif records|length == 0 %}
+        <div class="empty-state">
+            <h3>No scans yet</h3>
+            <p>Your scans will appear here after you run your first diagnosis.</p>
+            <a href="/page3" style="display:inline-block; margin-top:16px; padding:10px 24px; background:#175810; color:#fff; border-radius:25px; text-decoration:none; font-size:0.95rem;">Run a Scan</a>
+        </div>
+
+        {% else %}
+
+        <!-- Stats -->
+        {% if stats is defined and stats.total > 0 %}
+        <div class="stats-grid">
+            <div class="stat-card stat-total">
+                <div class="stat-value">{{ stats.total }}</div>
+                <div class="stat-label">My Scans</div>
+            </div>
+            <div class="stat-card stat-cancer">
+                <div class="stat-value">{{ stats.cancer }}</div>
+                <div class="stat-label">Cancer</div>
+            </div>
+            <div class="stat-card stat-caution">
+                <div class="stat-value">{{ stats.caution }}</div>
+                <div class="stat-label">Caution</div>
+            </div>
+            <div class="stat-card stat-safe">
+                <div class="stat-value">{{ stats.non_cancer }}</div>
+                <div class="stat-label">Non-Cancerous</div>
+            </div>
+        </div>
+
+        <div class="chart-wrap">
+            <canvas id="diagChart"></canvas>
+            <ul class="chart-legend" id="chartLegend"></ul>
+        </div>
+        {% endif %}
+
+        <h2 class="page-title">My Scans</h2>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+            <p class="record-count" id="recordCount" style="margin:0;">Showing {{ records|length }} record(s)</p>
+        </div>
+
+        <div class="toolbar">
+            <input type="text" id="searchInput" placeholder="Search by name or patient ID...">
+            <select id="diagnosisFilter">
+                <option value="">All diagnoses</option>
+                <option value="cancer">Cancer</option>
+                <option value="noncancer">Non-Cancerous</option>
+                <option value="caution">Can lead to cancer</option>
+            </select>
+            <input type="date" id="dateFrom" title="From date">
+            <input type="date" id="dateTo" title="To date">
+        </div>
+
+        <div class="table-wrap">
+            <table id="recordTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Patient ID</th>
+                        <th>Age</th>
+                        <th>Sex</th>
+                        <th>Diagnosis</th>
+                        <th>Confidence</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in records %}
+                    {% set diag = r.get('predicted_class', 'N/A') %}
+                    {% set conf = r.get('confidence', None) %}
+                    {% if 'Non-Cancerous' in diag %}
+                        {% set dtype = 'noncancer' %}
+                    {% elif 'lead' in diag %}
+                        {% set dtype = 'caution' %}
+                    {% else %}
+                        {% set dtype = 'cancer' %}
+                    {% endif %}
+                    <tr data-type="{{ dtype }}" data-date="{{ r.get('timestamp_raw', '') }}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ r.get('patient_name', '—') }}</td>
+                        <td>{{ r.get('patient_id', '—') }}</td>
+                        <td>{{ r.get('patient_age', '—') }}</td>
+                        <td>{{ r.get('patient_sex', '—') | capitalize }}</td>
+                        <td>
+                            {% if 'Cancer' in diag and 'Non' not in diag and 'lead' not in diag %}
+                                <span class="badge badge-cancer">{{ diag }}</span>
+                            {% elif 'lead' in diag %}
+                                <span class="badge badge-caution">{{ diag }}</span>
+                            {% else %}
+                                <span class="badge badge-noncancer">{{ diag }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="confidence-cell
+                            {% if conf and conf >= 75 %} conf-high
+                            {% elif conf and conf >= 50 %} conf-medium
+                            {% else %} conf-low{% endif %}">
+                            {% if conf %}{{ conf }}%{% else %}—{% endif %}
+                        </td>
+                        <td>{{ r.get('timestamp', '—') }}</td>
+                        <td>
+                            <form method="POST" action="/delete_record/{{ r.get('record_id') }}" class="delete-form">
+                                <button type="submit" class="delete-btn" title="Delete record">&#128465;</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination-wrap" id="pagination"></div>
+        {% endif %}
+    </div>
+</main>
+
+<script>
+    particlesJS('particles-js', {
+        particles: { number: { value: 150 }, size: { value: 3 }, move: { speed: 1 } },
+        interactivity: { detect_on: 'window', events: { onhover: { enable: true, mode: 'repulse' } } }
+    });
+
+    const searchInput = document.getElementById('searchInput');
+    const diagFilter  = document.getElementById('diagnosisFilter');
+    const dateFrom    = document.getElementById('dateFrom');
+    const dateTo      = document.getElementById('dateTo');
+    const pagination  = document.getElementById('pagination');
+    const countLabel  = document.getElementById('recordCount');
+    const PAGE_SIZE   = 10;
+    let currentPage   = 1;
+
+    function getFilteredRows() {
+        const query = (searchInput ? searchInput.value : '').toLowerCase();
+        const diag  = diagFilter ? diagFilter.value : '';
+        const from  = dateFrom ? dateFrom.value : '';
+        const to    = dateTo   ? dateTo.value   : '';
+        return Array.from(document.querySelectorAll('#recordTable tbody tr')).filter(row => {
+            const name  = row.cells[1].textContent.toLowerCase();
+            const pid   = row.cells[2].textContent.toLowerCase();
+            const dtype = row.dataset.type || '';
+            const rdate = row.dataset.date || '';
+            return (!query || name.includes(query) || pid.includes(query))
+                && (!diag || dtype === diag)
+                && (!from || rdate >= from)
+                && (!to   || rdate <= to);
+        });
+    }
+
+    function renderPage() {
+        const filtered = getFilteredRows();
+        const total    = filtered.length;
+        const pages    = Math.max(1, Math.ceil(total / PAGE_SIZE));
+        currentPage    = Math.min(currentPage, pages);
+
+        document.querySelectorAll('#recordTable tbody tr').forEach(r => r.style.display = 'none');
+        filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+                .forEach(r => r.style.display = '');
+
+        if (countLabel) {
+            const start = total === 0 ? 0 : (currentPage - 1) * PAGE_SIZE + 1;
+            const end   = Math.min(currentPage * PAGE_SIZE, total);
+            countLabel.textContent = total === 0
+                ? 'No matching records'
+                : `Showing ${start}–${end} of ${total} record(s)`;
+        }
+
+        if (pagination) {
+            pagination.innerHTML = '';
+            if (pages <= 1) return;
+            const prev = document.createElement('button');
+            prev.className = 'page-btn'; prev.textContent = '← Prev';
+            prev.disabled = currentPage === 1;
+            prev.onclick = () => { currentPage--; renderPage(); };
+            pagination.appendChild(prev);
+            for (let i = 1; i <= pages; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'page-btn' + (i === currentPage ? ' active' : '');
+                btn.textContent = i;
+                btn.onclick = (p => () => { currentPage = p; renderPage(); })(i);
+                pagination.appendChild(btn);
+            }
+            const next = document.createElement('button');
+            next.className = 'page-btn'; next.textContent = 'Next →';
+            next.disabled = currentPage === pages;
+            next.onclick = () => { currentPage++; renderPage(); };
+            pagination.appendChild(next);
+        }
+    }
+
+    if (searchInput) searchInput.addEventListener('input',  () => { currentPage = 1; renderPage(); });
+    if (diagFilter)  diagFilter.addEventListener('change',  () => { currentPage = 1; renderPage(); });
+    if (dateFrom)    dateFrom.addEventListener('change',    () => { currentPage = 1; renderPage(); });
+    if (dateTo)      dateTo.addEventListener('change',      () => { currentPage = 1; renderPage(); });
+    renderPage();
+
+    document.querySelectorAll('.delete-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('Delete this record? This cannot be undone.')) {
+                e.preventDefault();
+            }
+        });
+    });
+
+    // Diagnosis distribution chart
+    const diagCounts  = {{ (stats.diagnosis_counts if stats is defined else {}) | tojson }};
+    const chartCanvas = document.getElementById('diagChart');
+    if (chartCanvas && Object.keys(diagCounts).length > 0) {
+        const palette = ['#c0392b','#e74c3c','#5da64e','#1e7e34','#2f6329','#856404','#f39c12'];
+        const labels  = Object.keys(diagCounts).map(k => k.replace(/\(.*?\)/g, '').trim());
+        const values  = Object.values(diagCounts);
+        new Chart(chartCanvas, {
+            type: 'doughnut',
+            data: { labels: Object.keys(diagCounts), datasets: [{ data: values, backgroundColor: palette, borderWidth: 2 }] },
+            options: { plugins: { legend: { display: false } }, cutout: '60%' }
+        });
+        const legend = document.getElementById('chartLegend');
+        if (legend) {
+            labels.forEach((label, i) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="dot" style="background:${palette[i % palette.length]}"></span>${label} <strong>(${values[i]})</strong>`;
+                legend.appendChild(li);
+            });
+        }
+    }
+</script>
+
+</body>
+</html>

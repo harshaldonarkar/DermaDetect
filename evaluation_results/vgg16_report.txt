@@ -1,0 +1,35 @@
+Model: VGG16
+Overall Accuracy: 59.00%
+Macro AUC (OvR):  0.7827
+
+                      precision    recall  f1-score   support
+
+   Actinic Keratosis      0.235     0.522     0.325       364
+Basal Cell Carcinoma      0.459     0.332     0.385       768
+    Benign Keratosis      0.383     0.031     0.057       745
+      Dermatofibroma      0.054     0.070     0.061        71
+    Melanocytic Nevi      0.760     0.838     0.797      3916
+  Pyogenic Granuloma      0.300     0.038     0.067        79
+            Melanoma      0.336     0.366     0.351      1127
+
+            accuracy                          0.590      7070
+           macro avg      0.361     0.314     0.292      7070
+        weighted avg      0.581     0.590     0.563      7070
+
+Per-class Specificity:
+  Actinic Keratosis         0.908
+  Basal Cell Carcinoma      0.952
+  Benign Keratosis          0.994
+  Dermatofibroma            0.988
+  Melanocytic Nevi          0.672
+  Pyogenic Granuloma        0.999
+  Melanoma                  0.863
+
+Per-class AUC:
+  Actinic Keratosis         0.8742
+  Basal Cell Carcinoma      0.8631
+  Benign Keratosis          0.6987
+  Dermatofibroma            0.7311
+  Melanocytic Nevi          0.8203
+  Pyogenic Granuloma        0.7553
+  Melanoma                  0.7366
